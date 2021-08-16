@@ -82,7 +82,7 @@ function breakfast()
                 variant="userdebug"
             fi
 
-            lunch shadow_$target-$variant
+            lunch lineage_$target-$variant
         fi
     fi
     return $?
