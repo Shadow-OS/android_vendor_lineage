@@ -1,11 +1,11 @@
-# Inherit full common ShadowOS stuff
-$(call inherit-product, vendor/shadow/config/common_full.mk)
+# Inherit full common Lineage stuff
+$(call inherit-product, vendor/lineage/config/common_full.mk)
 
 # Required packages
 PRODUCT_PACKAGES += \
     LatinIME
 
 # Include Lineage LatinIME dictionaries
-PRODUCT_PACKAGE_OVERLAYS += vendor/shadow/overlay/dictionaries
+PRODUCT_PACKAGE_OVERLAYS += vendor/lineage/overlay/dictionaries
 
-$(call inherit-product, vendor/shadow/config/telephony.mk)
+$(call inherit-product, vendor/lineage/config/telephony.mk)
