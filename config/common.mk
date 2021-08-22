@@ -194,6 +194,18 @@ DEVICE_PACKAGE_OVERLAYS += vendor/lineage/overlay/common
 PRODUCT_VERSION_MAJOR = 1
 PRODUCT_VERSION_MINOR = 0
 PRODUCT_VERSION_MAINTENANCE := 0
+PRODUCT_VERSION_CODENAME = Meet The Shadows
+
+TARGET_BUILD_VARIANT_ID :=
+ifeq ($(SHADOW_BUILD_TYPE),gapps)
+ifeq ($(TARGET_GAPPS_ARCH),)
+$(warning TARGET_GAPPS_ARCH is not set, defaulting to arm64)
+TARGET_GAPPS_ARCH := arm64
+endif
+TARGET_BUILD_VARIANT_ID := -GApps
+$(call inherit-product, vendor/gapps/$(TARGET_GAPPS_ARCH)/$(TARGET_GAPPS_ARCH)-vendor.mk)
+PRODUCT_PROPERTY_OVERRIDES += lineage.updater.uri=https://raw.github.com/Stellar-Devices/OTA/stellar-S1/gapps/{device}.json
+endif
 
 ifeq ($(TARGET_VENDOR_SHOW_MAINTENANCE_VERSION),true)
     LINEAGE_VERSION_MAINTENANCE := $(PRODUCT_VERSION_MAINTENANCE)
@@ -219,8 +231,8 @@ endif
 ifdef LINEAGE_BUILDTYPE
     ifneq ($(LINEAGE_BUILDTYPE), SNAPSHOT)
         ifdef LINEAGE_EXTRAVERSION
-            # Force build type to EXPERIMENTAL
-            LINEAGE_BUILDTYPE := EXPERIMENTAL
+            # Force build type to OFFICIAL
+            LINEAGE_BUILDTYPE := OFFICIAL
             # Remove leading dash from LINEAGE_EXTRAVERSION
             LINEAGE_EXTRAVERSION := $(shell echo $(LINEAGE_EXTRAVERSION) | sed 's/-//')
             # Add leading dash to LINEAGE_EXTRAVERSION
@@ -228,8 +240,8 @@ ifdef LINEAGE_BUILDTYPE
         endif
     else
         ifndef LINEAGE_EXTRAVERSION
-            # Force build type to EXPERIMENTAL, SNAPSHOT mandates a tag
-            LINEAGE_BUILDTYPE := EXPERIMENTAL
+            # Force build type to OFFICIAL, SNAPSHOT mandates a tag
+            LINEAGE_BUILDTYPE := OFFICIAL
         else
             # Remove leading dash from LINEAGE_EXTRAVERSION
             LINEAGE_EXTRAVERSION := $(shell echo $(LINEAGE_EXTRAVERSION) | sed 's/-//')
@@ -240,7 +252,7 @@ ifdef LINEAGE_BUILDTYPE
 else
     # If LINEAGE_BUILDTYPE is not defined, set to UNOFFICIAL
     LINEAGE_BUILDTYPE := UNOFFICIAL
-    LINEAGE_EXTRAVERSION :=
+    LINEAGE_EXTRAVERSION := OFFICIAL
 endif
 
 ifeq ($(LINEAGE_BUILDTYPE), UNOFFICIAL)
